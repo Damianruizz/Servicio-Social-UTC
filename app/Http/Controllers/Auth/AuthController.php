@@ -14,17 +14,6 @@ use Illuminate\Support\Facades\Input;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
-
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
@@ -67,11 +56,6 @@ class AuthController extends Controller
         ]);
     }
 
-    public function showcreate()
-    {
-        // Si no hay sesión activa mostramos el formulario
-    }
-
     public function showLogin()
     {
         $companies = Company::all();
@@ -98,7 +82,6 @@ class AuthController extends Controller
         if (Auth::attempt($data)) 
         {
             // Si nuestros datos son correctos mostramos la página de inicio
-            //return Redirect::intended('admin/hello');
             return View::make("admin/hello", array("companies" => $companies));
         } else {
             return View::make("welcome", array("companies" => $companies));
@@ -114,5 +97,4 @@ class AuthController extends Controller
         $companies = Company::all();
         return View::make("welcome", array("companies" => $companies));
     }
-
 }
