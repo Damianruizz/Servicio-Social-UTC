@@ -16,14 +16,8 @@ class CreateCompaniesTable extends Migration
             $table->increments('id');
             $table->string('company');
             $table->string('responsable1');
-            $table->string('responsable2');
-            $table->string('responsable3');
             $table->string('tel1');
-            $table->string('tel2');
-            $table->string('tel3');
             $table->string('email1');
-            $table->string('email2');
-            $table->string('email3');
             $table->string('address');
             $table->rememberToken();
             $table->timestamps();

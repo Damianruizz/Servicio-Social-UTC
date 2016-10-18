@@ -20,6 +20,7 @@ class CreateAlumnoTable extends Migration
             $table->string('Contrasena');
             $table->string('Matricula');
             $table->string('Grupo_id');
+            $table->string('company_id');
             $table->rememberToken();
             $table->timestamps();
         });
