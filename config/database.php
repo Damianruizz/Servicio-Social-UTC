@@ -1,5 +1,12 @@
 <?php
 
+$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+$host = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$database = substr($url["path"], 1);
+
 return [
 
     /*
@@ -44,17 +51,6 @@ return [
     |
     */
 
-
-    //Produccion en Heroku
-
-    $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-
-    $host = $url["host"];
-    $username = $url["user"];
-    $password = $url["pass"];
-    $database = substr($url["path"], 1);
-
-
     'connections' => [
 
         'sqlite' => [
@@ -66,15 +62,15 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'host' => $host,
-            //'port' => env('DB_PORT', '3306'),
+            'port' => env('DB_PORT', '3306'),
             'database' => $database,
             'username' => $username,
             'password' => $password,
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-            //'strict' => false,
-            //'engine' => null,
+            'strict' => false,
+            'engine' => null,
         ],
 
         'pgsql' => [
