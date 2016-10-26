@@ -6,6 +6,7 @@ use View;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Alumno;
+use Auth;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Input;
 
