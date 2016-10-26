@@ -13,56 +13,89 @@ class AlumnoController extends Controller
 {
     public function index()
     {
-        $companies = Company::all();
-        $alumnos = Alumno::all();
-        return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
+        if (Auth::check()) {
+            $companies = Company::all();
+            $alumnos = Alumno::all();
+            return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));
+        }
     }
 
     public function show($id)
     {
-        $company = Company::find($id);
-        $alumnos = Company::find($id)->alumnos;
-        return View::make("admin/showcompany", array("company" => $company, "alumnos" => $alumnos));
+        if (Auth::check()) {
+
+            $company = Company::find($id);
+            $alumnos = Company::find($id)->alumnos;
+            return View::make("admin/showcompany", array("company" => $company, "alumnos" => $alumnos));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));
+        }
     }
 
     public function asignar($id)
-    {
-        $company = Company::find($id);
-        $alumnos = Alumno::where('company_id', '0')->get();
-        return View::make("admin/asigalumno", array("company" => $company, "alumnos" => $alumnos));
+    {   
+        if (Auth::check()) {
+
+            $company = Company::find($id);
+            $alumnos = Alumno::where('company_id', '0')->get();
+            return View::make("admin/asigalumno", array("company" => $company, "alumnos" => $alumnos));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 
     public function asignacion()
     {
-        //Realizar asignacion de alumnos seleccionados        
+        if (Auth::check()) {
 
-        $cantidad = Input::get('cantidad');
-        $company_id = Input::get('company_id');
+            //Realizar asignacion de alumnos seleccionados        
+            $cantidad = Input::get('cantidad');
+            $company_id = Input::get('company_id');
 
-        for ($counter=0; $counter < $cantidad; $counter++) { 
+            for ($counter=0; $counter < $cantidad; $counter++) { 
 
-            if ($alumno = Input::get('id_alumno'.$counter)){
-                
-                $find_alumno = Alumno::findOrFail($alumno);
+                if ($alumno = Input::get('id_alumno'.$counter)){
+                    
+                    $find_alumno = Alumno::findOrFail($alumno);
 
-                $find_alumno->company_id = $company_id;
-                $find_alumno->save();
-            }            
+                    $find_alumno->company_id = $company_id;
+                    $find_alumno->save();
+                }            
+            }
+            
+            $companies = Company::all();
+            $alumnos = Alumno::all();
+            return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));
         }
-        
-        $companies = Company::all();
-        $alumnos = Alumno::all();
-        return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
     }
 
     public function quitar($id)
-    {
-        $alumno = Alumno::findOrFail($id);
-        $alumno->company_id = "0";
-        $alumno->save();
+    {   
+        if (Auth::check()) {
 
-        $companies = Company::all();
-        $alumnos = Alumno::all();
-        return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
+            $alumno = Alumno::findOrFail($id);
+            $alumno->company_id = "0";
+            $alumno->save();
+
+            $companies = Company::all();
+            $alumnos = Alumno::all();
+            return View::make("admin/asignacion", array("companies" => $companies, "alumnos" => $alumnos));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 }

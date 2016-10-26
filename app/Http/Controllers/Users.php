@@ -45,62 +45,86 @@ class Users extends Controller
 
     public function store(Request $request)
     {
-        $data = [
-            'name' => Input::get('name'),
-            'password' => Input::get('password'),
-            'username' => Input::get('user')
-        ];
-        $input = $request->all();
-     
-        User::create([
-            'name' => $data['name'],
-            'password' => bcrypt($data['password']),
-            'username' => $data['username'],
-        ]);
+        if(Auth::check()){
+            $data = [
+                'name' => Input::get('name'),
+                'password' => Input::get('password'),
+                'username' => Input::get('user')
+            ];
+            $input = $request->all();
+         
+            User::create([
+                'name' => $data['name'],
+                'password' => bcrypt($data['password']),
+                'username' => $data['username'],
+            ]);
 
-        $user = Auth::user();
-        $users = User::all();
-     
-        return View::make("users/hello", array("users" => $users, "user" => $user));
+            $user = Auth::user();
+            $users = User::all();
+         
+            return View::make("users/hello", array("users" => $users, "user" => $user));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-     
-        return view('users/edit')->withUser($user);
+        if(Auth::check()){
+            $user = User::findOrFail($id);
+         
+            return view('users/edit')->withUser($user);
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        if(Auth::check()){
+            $user = User::findOrFail($id);
 
-        $input = $request->all();
+            $input = $request->all();
 
-        //Encriptando la contraseña
-        $password = bcrypt(Input::get('password'));
+            //Encriptando la contraseña
+            $password = bcrypt(Input::get('password'));
 
-        $user->name = Input::get('name');
-        $user->password = $password;
-        $user->username = Input::get('user');
+            $user->name = Input::get('name');
+            $user->password = $password;
+            $user->username = Input::get('user');
 
-        $user->save();
+            $user->save();
 
-        $user = Auth::user();
-        $users = User::all();
+            $user = Auth::user();
+            $users = User::all();
 
-        return View::make("users/hello", array("users" => $users, "user" => $user));
+            return View::make("users/hello", array("users" => $users, "user" => $user));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        if(Auth::check()){
+            $user = User::findOrFail($id);
 
-        $user->delete();
+            $user->delete();
 
-        $user = Auth::user();
-        $users = User::all();
+            $user = Auth::user();
+            $users = User::all();
 
-        return View::make("users/hello", array("users" => $users, "user" => $user));
+            return View::make("users/hello", array("users" => $users, "user" => $user));
+        } else {
+
+            $companies = Company::all();
+            return View::make("welcome", array("companies" => $companies));            
+        }
     }
 }

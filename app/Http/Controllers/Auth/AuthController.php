@@ -91,10 +91,13 @@ class AuthController extends Controller
  
     public function logOut()
     {
-        // Cerramos la sesión
+      // Cerramos la sesión
+      if (Auth::check()){
+        
         Auth::logout();
         // Volvemos al login y mostramos un mensaje indicando que se cerró la sesión
         $companies = Company::all();
         return View::make("welcome", array("companies" => $companies));
+      }
     }
 }
